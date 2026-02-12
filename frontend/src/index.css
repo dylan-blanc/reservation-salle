@@ -1,14 +1,15 @@
 @import "tailwindcss";
 
-body {
+body,
+html,
+#root {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+  height: 100%;
 }
 
-.main {
-    min-height: 73vh;
-}
+/* .main styles are now handled via Tailwind or specific component CSS */
 
 /* Classes réutilisables (optionnel) */
 @layer components {
@@ -24,7 +25,6 @@ body {
 }
 
 :root {
-
   min-height: 100%;
 
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
