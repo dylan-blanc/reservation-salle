@@ -34,5 +34,10 @@ export const authService = {
       method: "POST",
       body: JSON.stringify({ email, password }),
     }),
+  loginWithGoogle: (credential) =>
+    fetchAPI("/auth/google", {
+      method: "POST",
+      body: JSON.stringify({ credential }),
+    }),
   getProfile: () => fetchAPI("/auth/me"),
 };

@@ -26,6 +26,12 @@ export function AuthProvider({ children }) {
     setUser(data.user);
     return data;
   };
+  const loginWithGoogle = async (credential) => {
+    const data = await authService.loginWithGoogle(credential);
+    localStorage.setItem("token", data.token);
+    setUser(data.user);
+    return data;
+  };
   const register = async (userData) => {
     const data = await authService.register(userData);
     localStorage.setItem("token", data.token);
@@ -43,6 +49,7 @@ export function AuthProvider({ children }) {
         loading,
         isAuthenticated: !!user,
         login,
+        loginWithGoogle,
         register,
         logout,
       }}

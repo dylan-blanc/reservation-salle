@@ -1,6 +1,7 @@
 // controllers/auth.controller.js
 import jwt from "jsonwebtoken";
 import User from "../models/user.model.js";
+import { OAuth2Client } from "google-auth-library";
 
 // Génère un token JWT
 const generateToken = (user) => {
@@ -54,6 +55,53 @@ export const login = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ error: "Erreur serveur" });
+  }
+};
+
+// POST /api/auth/google
+const client = new OAuth2Client(process.env.VITE_GOOGLE_CLIENT_ID);
+
+export const googleLogin = async (req, res) => {
+  try {
+    const { credential } = req.body;
+
+    // Vérification du token Google
+    const ticket = await client.verifyIdToken({
+      idToken: credential,
+      audience: process.env.VITE_GOOGLE_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+    const { email, given_name, family_name, sub: googleId } = payload;
+
+    // Chercher l'utilisateur par email
+    let user = await User.findByEmail(email);
+
+    if (!user) {
+      // Créer l'utilisateur s'il n'existe pas
+      // On met un mot de passe aléatoire car il ne sera pas utilisé
+      const randomPassword = Math.random().toString(36).slice(-10);
+      user = await User.create({
+        email,
+        password: randomPassword,
+        firstname: given_name || "Utilisateur",
+        lastname: family_name || "Google",
+      });
+    }
+
+    const token = generateToken(user);
+    res.json({
+      user: {
+        id: user.id,
+        email: user.email,
+        firstname: user.firstname,
+        lastname: user.lastname,
+      },
+      token,
+    });
+  } catch (error) {
+    console.error("Google Auth Error:", error);
+    res.status(401).json({ error: "Authentification Google échouée" });
   }
 };
 
