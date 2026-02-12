@@ -1,5 +1,5 @@
 // server.js
-import 'dotenv/config'; // Syntaxe ES Module pour dotenv ⬅️
+import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import { testConnection } from './config/db.js';

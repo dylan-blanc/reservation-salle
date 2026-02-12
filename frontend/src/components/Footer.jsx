@@ -13,9 +13,9 @@ function Footer() {
 
   return (
     <footer className="bg-slate-900 text-slate-300">
-      <div className="mx-auto flex w-full max-w-6xl flex-col items-center justify-between gap-4 px-6 py-5 md:flex-row">
+      <div className="mx-auto flex w-full max-w-6xl flex-col items-center justify-between gap-4 px-6 py-2 md:flex-row">
         <p className="text-sm tracking-wide">
-          © {year} Your Company, Inc. All rights reserved.
+          © {year} TechSpace Solutions
         </p>
         <div className="flex items-center gap-5">
           <a

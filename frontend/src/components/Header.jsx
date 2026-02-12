@@ -3,6 +3,8 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWaveSquare } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "../hooks/useAuth.js";
+import logo from "../assets/Logo.png";
+
 function Header() {
   const { user, isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
@@ -36,15 +38,12 @@ function Header() {
           <div className="flex flex-1 justify-center">
             <Link
               to="/"
-              aria-label="Home"
+              alt="Accueil"
               className="flex items-center gap-2 text-white"
             >
-              <FontAwesomeIcon
-                icon={faWaveSquare}
-                className="text-xl text-indigo-400"
-              />
+              <img src={logo} alt="Accueil" className="h-10 w-auto" />
               <span className="hidden text-sm font-semibold tracking-[0.2em] text-slate-200 sm:inline">
-                STARTER
+                TechSpace Solutions
               </span>
             </Link>
           </div>
