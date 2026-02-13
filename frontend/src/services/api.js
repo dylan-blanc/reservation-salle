@@ -1,7 +1,9 @@
 // services/api.js
+import Cookies from "js-cookie";
+
 const API_URL = "http://localhost:5000/api";
 async function fetchAPI(endpoint, options = {}) {
-  const token = localStorage.getItem("token");
+  const token = Cookies.get("token");
   const headers = {
     "Content-Type": "application/json",
     ...(token && { Authorization: `Bearer ${token}` }),

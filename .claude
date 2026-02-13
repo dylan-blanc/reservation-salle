@@ -1,0 +1,40 @@
+Priorise un code simple et clair
+Pas de réponse émotionel
+Seulement des commentaires pertinent sur l'interaction entre les fonctions
+TailwindCSS est installer, utilise le en priorité 
+avant l'execution du code, créer un plan informatif 
+
+stack : MERN
+
+packet installer important : 
+
+FrontEnd : 
+react-router-dom
+
+  "dependencies": 
+    "@fortawesome/fontawesome-svg-core": "^7.1.0",
+    "@fortawesome/free-brands-svg-icons": "^7.1.0",
+    "@fortawesome/free-regular-svg-icons": "^7.1.0",
+    "@fortawesome/free-solid-svg-icons": "^7.1.0",
+    "@fortawesome/react-fontawesome": "^3.2.0",
+    "@react-oauth/google": "^0.13.4",
+    "@tailwindcss/vite": "^4.1.18",
+    "js-cookie": "^3.0.5",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-icons": "^5.5.0",
+    "react-router-dom": "^7.13.0"
+
+
+BackEnd : 
+Mysql2
+express
+
+  "dependencies":
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.2.4",
+    "express": "^5.2.1",
+    "google-auth-library": "^10.5.0",
+    "jsonwebtoken": "^9.0.3",
+    "mysql2": "^3.16.3"

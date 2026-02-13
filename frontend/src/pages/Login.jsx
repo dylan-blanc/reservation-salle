@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth.js";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
+import logo from "../assets/Logo.png";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -43,65 +44,91 @@ function Login() {
 
   return (
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-      <div className="flex flex-col items-center justify-center h-screen gap-6">
-        <h1 className="text-3xl font-bold">Connexion</h1>
+      <div className="glass-card w-full max-w-md transition-all duration-500 hover:border-white/30">
+        <div className="flex flex-col items-center mb-6">
+          <Link
+            to="/"
+            className="mb-2 transition-transform hover:scale-105 active:scale-95"
+          >
+            <img src={logo} alt="Logo" className="h-10 w-auto" />
+          </Link>
+          <p className="text-gray-400 text-xs text-center">
+            Connectez-vous à votre espace
+          </p>
+        </div>
 
         {error && (
-          <p className="text-red-500 bg-red-100 p-2 rounded w-full max-w-xs text-center border border-red-200">
+          <div className="mb-4 p-3 bg-red-500/10 border border-red-500/50 rounded-xl text-red-500 text-[11px] text-center">
             {error}
-          </p>
+          </div>
         )}
 
-        <form
-          onSubmit={handleSubmit}
-          className="flex flex-col gap-4 w-full max-w-xs"
-        >
-          <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium">Email</label>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+          <div className="space-y-1.5">
+            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest pl-1">
+              Email
+            </label>
             <input
               type="email"
-              className="border p-2 rounded focus:ring-2 focus:ring-blue-500 outline-none"
+              className="input-premium"
+              placeholder="Email@exemple.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>
-          <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium">Mot de passe</label>
+
+          <div className="space-y-1.5">
+            <div className="flex justify-between items-center">
+              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest pl-1">
+                Mot de passe
+              </label>
+            </div>
             <input
               type="password"
-              className="border p-2 rounded focus:ring-2 focus:ring-blue-500 outline-none"
+              className="input-premium"
+              placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
           </div>
+
           <button
             type="submit"
             disabled={loading}
-            className="bg-blue-600 text-white p-2 rounded font-medium hover:bg-blue-700 disabled:bg-blue-300 transition-colors"
+            className="btn-premium bg-accent hover:bg-blue-500 text-white mt-2 w-full text-sm py-2.5"
           >
-            {loading ? "Connexion..." : "Se connecter"}
+            {loading ? "Chargement..." : "Se connecter"}
           </button>
         </form>
 
-        <div className="flex items-center gap-4 w-full max-w-xs">
-          <div className="h-px bg-gray-300 flex-1"></div>
-          <span className="text-gray-500 text-sm">OU</span>
-          <div className="h-px bg-gray-300 flex-1"></div>
+        <div className="flex items-center gap-3 my-5">
+          <div className="h-px bg-white/10 flex-1"></div>
+          <span className="text-gray-500 text-[9px] font-bold uppercase tracking-[0.2em]">
+            Ou
+          </span>
+          <div className="h-px bg-white/10 flex-1"></div>
         </div>
 
-        <GoogleLogin
-          onSuccess={handleGoogleSuccess}
-          onError={() => setError("Erreur d'initialisation Google")}
-          useOneTap
-          theme="filled_blue"
-          shape="pill"
-        />
+        <div className="flex justify-center transform transition-transform hover:scale-[1.02]">
+          <GoogleLogin
+            onSuccess={handleGoogleSuccess}
+            onError={() => setError("Échec Google")}
+            useOneTap
+            theme="filled_blue"
+            shape="circle"
+            size="large"
+            width="100%"
+          />
+        </div>
 
-        <p className="text-gray-600">
+        <p className="text-center mt-6 text-gray-400 text-xs">
           Pas de compte ?{" "}
-          <Link to="/register" className="text-blue-600 hover:underline">
+          <Link
+            to="/register"
+            className="text-white font-bold hover:text-accent transition-colors underline underline-offset-4 pl-1"
+          >
             S'inscrire
           </Link>
         </p>
@@ -109,4 +136,5 @@ function Login() {
     </GoogleOAuthProvider>
   );
 }
+
 export default Login;

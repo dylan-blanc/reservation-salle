@@ -23,17 +23,7 @@ function Header() {
           <nav
             aria-label="Global"
             className="hidden flex-1 items-center gap-8 md:flex"
-          >
-            <NavLink to="/" className={navLinkClass}>
-              Product
-            </NavLink>
-            <NavLink to="/" className={navLinkClass}>
-              Features
-            </NavLink>
-            <NavLink to="/" className={navLinkClass}>
-              Company
-            </NavLink>
-          </nav>
+          ></nav>
 
           <div className="flex flex-1 justify-center">
             <Link
@@ -51,8 +41,14 @@ function Header() {
           <div className="flex flex-1 items-center justify-end gap-4">
             {isAuthenticated ? (
               <>
+                <Link
+                  to="me"
+                  className="text-sm font-semibold text-slate-200 transition hover:text-white"
+                >
+                  Mon Profile
+                </Link>
                 <span className="hidden text-sm text-slate-300 sm:inline">
-                  Bonjour {user?.firstname}
+                  Bonjour {user?.surname}
                 </span>
                 <button
                   type="button"

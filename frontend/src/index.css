@@ -11,16 +11,23 @@ html,
 
 /* .main styles are now handled via Tailwind or specific component CSS */
 
-/* Classes réutilisables (optionnel) */
+@theme {
+  --color-primary: #0a0f1d;
+  --color-secondary: #16213e;
+  --color-third: #1e293b;
+  --color-accent: #3b82f6;
+  --color-surface: #0f172a;
+}
+
 @layer components {
-  .btn {
-    @apply px-6 py-2 rounded-lg font-medium transition-all;
+  .btn-premium {
+    @apply px-6 py-2 rounded-xl font-semibold transition-all duration-300 active:scale-95 shadow-lg;
   }
-  .btn-primary {
-    @apply bg-indigo-600 text-white hover:bg-indigo-700;
+  .input-premium {
+    @apply w-full px-4 py-2 bg-white/5 border border-white/10 rounded-xl focus:ring-2 focus:ring-accent/50 focus:border-accent outline-none transition-all placeholder:text-gray-500 text-white text-sm;
   }
-  .form-input {
-    @apply w-full px-4 py-2 border-2 rounded-lg;
+  .glass-card {
+    @apply bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl rounded-3xl p-6;
   }
 }
 

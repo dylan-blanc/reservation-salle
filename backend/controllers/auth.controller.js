@@ -13,9 +13,9 @@ const generateToken = (user) => {
 // POST /api/auth/register
 export const register = async (req, res) => {
   try {
-    const { email, password, firstname, lastname } = req.body;
+    const { email, password, surname, name } = req.body;
 
-    if (!email || !password || !firstname || !lastname) {
+    if (!email || !password || !surname || !name) {
       return res.status(400).json({ error: "Tous les champs sont requis" });
     }
 
@@ -24,11 +24,12 @@ export const register = async (req, res) => {
       return res.status(409).json({ error: "Email déjà utilisé" });
     }
 
-    const user = await User.create({ email, password, firstname, lastname });
+    const user = await User.create({ email, password, surname, name });
     const token = generateToken(user);
 
     res.status(201).json({ message: "Inscription réussie", user, token });
   } catch (error) {
+    console.error("Registration Error:", error);
     res.status(500).json({ error: "Erreur serveur" });
   }
 };
@@ -48,8 +49,8 @@ export const login = async (req, res) => {
       user: {
         id: user.id,
         email: user.email,
-        firstname: user.firstname,
-        lastname: user.lastname,
+        surname: user.surname,
+        name: user.name,
       },
       token,
     });
@@ -84,8 +85,8 @@ export const googleLogin = async (req, res) => {
       user = await User.create({
         email,
         password: randomPassword,
-        firstname: given_name || "Utilisateur",
-        lastname: family_name || "Google",
+        surname: given_name || "Utilisateur",
+        name: family_name || "Google",
       });
     }
 
@@ -94,8 +95,8 @@ export const googleLogin = async (req, res) => {
       user: {
         id: user.id,
         email: user.email,
-        firstname: user.firstname,
-        lastname: user.lastname,
+        surname: user.surname,
+        name: user.name,
       },
       token,
     });

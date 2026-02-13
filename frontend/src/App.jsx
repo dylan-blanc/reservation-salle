@@ -22,7 +22,7 @@ function App() {
       <Route element={<MainLayout />}>
         <Route path="/" element={<Home />} />
         <Route
-          path="/dashboard"
+          path="/me"
           element={
             <PrivateRoute>
               <Dashboard />
