@@ -202,9 +202,9 @@ _(Cela définit les fichiers d'entrée `-i` et de sortie `-o`. Adaptez les chemi
 }
 ```
 
-### 4. Lier le CSS dans votre PHP/HTML
+### 4. Pour PhP lier le CSS dans votre PHP/HTML
 
-⚠️ **Important :** Dans votre `index.php`, liez le fichier **généré** (ex: `app.css`), pas le fichier input.
+**Important :** Dans votre `index.php`, liez le fichier **généré** (ex: `app.css`), pas le fichier input.
 
 ```html
 <link rel="stylesheet" href="./assets/app.css" />

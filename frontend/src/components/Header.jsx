@@ -12,10 +12,6 @@ function Header() {
     logout();
     navigate("/login");
   };
-  const navLinkClass = ({ isActive }) =>
-    `text-sm font-semibold tracking-wide transition ${
-      isActive ? "text-white" : "text-slate-200 hover:text-white"
-    }`;
   return (
     <header className="bg-slate-950 text-white shadow-[0_12px_40px_rgba(2,6,23,0.35)]">
       <div className="mx-auto max-w-6xl px-4">

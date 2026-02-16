@@ -16,7 +16,6 @@ export function AuthProvider({ children }) {
         authService
           .getProfile()
           .then((data) => setUser(data.user))
-          .catch(() => Cookies.remove("token"))
           .finally(() => setLoading(false));
       } else {
         setLoading(false);
@@ -27,6 +26,7 @@ export function AuthProvider({ children }) {
 
   const login = async (email, password) => {
     const data = await authService.login(email, password);
+    Cookies.get("token");
     Cookies.set("token", data.token, { expires: 7 });
     setUser(data.user);
     return data;

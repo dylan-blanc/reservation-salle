@@ -1,5 +1,5 @@
 // models/user.model.js
-import { query } from "../config/db.js"; // Extension .js obligatoire ! ⬅️
+import { query } from "../config/db.js";
 import bcrypt from "bcrypt";
 const User = {
   // Trouver par email
@@ -11,7 +11,7 @@ const User = {
   // Trouver par ID (sans le password)
   async findById(id) {
     const sql =
-      "SELECT id, email, surname, name, created_at FROM users WHERE id = ?";
+      "SELECT id, email, surname, name FROM users WHERE id = ?";
     const results = await query(sql, [id]);
     return results[0] || null;
   },
@@ -19,14 +19,14 @@ const User = {
   async create({ email, password, surname, name }) {
     const hashedPassword = await bcrypt.hash(password, 10);
     const sql = `
-INSERT INTO users (email, password, surname, name)
-VALUES (?, ?, ?, ?)
+INSERT INTO users (email, password, surname, name, created_at, updated_at)
+VALUES (?, ?, ?, ?, NOW(), NOW())
 `;
     const result = await query(sql, [
-      email.toLowerCase(),
+      email.toLowerCase().trim(),
       hashedPassword,
-      surname,
-      name,
+      surname.trim(),
+      name.trim(),
     ]);
     return { id: result.insertId, email, surname, name };
   },

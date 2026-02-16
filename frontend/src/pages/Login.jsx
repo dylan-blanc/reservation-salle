@@ -73,7 +73,7 @@ function Login() {
               className="input-premium"
               placeholder="Email@exemple.com"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value.replace(/\s/g, ""))}
               required
             />
           </div>
@@ -89,7 +89,7 @@ function Login() {
               className="input-premium"
               placeholder="••••••••"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => setPassword(e.target.value.replace(/\s/g, ""))}
               required
             />
           </div>
