@@ -43,3 +43,12 @@ export const authService = {
     }),
   getProfile: () => fetchAPI("/auth/me"),
 };
+
+export const planningService = {
+  create: (data) =>
+    fetchAPI("/planning", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+  getAll: () => fetchAPI("/planning"),
+};
