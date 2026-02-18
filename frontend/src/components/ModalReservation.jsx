@@ -1,17 +1,54 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { IoClose } from "react-icons/io5";
 import { planningService } from "../services/api";
 
-function ModalReservation({ isOpen, onClose, slotData }) {
+const formatHourValue = (dateValue) => {
+  const date = new Date(dateValue);
+  if (Number.isNaN(date.getTime())) {
+    return "";
+  }
+  const hours = date.getHours().toString().padStart(2, "0");
+  const minutes = date.getMinutes().toString().padStart(2, "0");
+  return `${hours}:${minutes}`;
+};
+
+function ModalReservation({ isOpen, onClose, slotData, reservation, onSaved }) {
+  const isEdit = Boolean(reservation?.id);
+  const defaultStart = slotData
+    ? `${slotData.heure.toString().padStart(2, "0")}:00`
+    : "";
+  const defaultEnd = slotData
+    ? `${(slotData.heure + 1).toString().padStart(2, "0")}:00`
+    : "";
+  const dayIndex = useMemo(() => {
+    if (reservation?.jour?.id) {
+      return reservation.jour.id;
+    }
+    return slotData?.jour?.id;
+  }, [reservation?.jour?.id, slotData?.jour?.id]);
+
   const [meaning, setmeaning] = useState("");
-  const [StartHour, setStartHour] = useState(
-    slotData ? `${slotData.heure.toString().padStart(2, "0")}:00` : "",
-  );
-  const [EndHour, setEndHour] = useState(
-    slotData ? `${(slotData.heure + 1).toString().padStart(2, "0")}:00` : "",
-  );
+  const [StartHour, setStartHour] = useState(defaultStart);
+  const [EndHour, setEndHour] = useState(defaultEnd);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+
+    if (reservation) {
+      setmeaning(reservation.title || "");
+      setStartHour(formatHourValue(reservation.start_date));
+      setEndHour(formatHourValue(reservation.end_date));
+      return;
+    }
+
+    setmeaning("");
+    setStartHour(defaultStart);
+    setEndHour(defaultEnd);
+  }, [isOpen, reservation, defaultStart, defaultEnd]);
 
   if (!isOpen) return null;
 
@@ -21,8 +58,22 @@ function ModalReservation({ isOpen, onClose, slotData }) {
     setError("");
 
     try {
-      await planningService.create({ meaning, StartHour, EndHour });
-      console.log("Réservation créée avec succès");
+      if (isEdit) {
+        await planningService.update(reservation.id, {
+          meaning,
+          StartHour,
+          EndHour,
+          dayIndex,
+        });
+      } else {
+        await planningService.create({
+          meaning,
+          StartHour,
+          EndHour,
+          dayIndex,
+        });
+      }
+      onSaved?.();
       onClose();
     } catch (err) {
       console.error("Erreur lors de la réservation:", err);
@@ -36,8 +87,10 @@ function ModalReservation({ isOpen, onClose, slotData }) {
       <div className="bg-slate-900 border border-white/10 p-8 rounded-2xl w-full max-w-md shadow-2xl transform transition-all scale-100 animate-in fade-in zoom-in duration-200">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-bold text-white">
-            Réserver pour{" "}
-            <span className="text-accent">{slotData.jour.nom}</span>
+            {isEdit ? "Modifier" : "Réserver pour"}{" "}
+            <span className="text-accent">
+              {reservation?.jour?.nom || slotData?.jour?.nom}
+            </span>
           </h2>
           <button
             onClick={onClose}

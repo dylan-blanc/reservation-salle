@@ -17,6 +17,11 @@ const Planning = {
     const rows = await query(sql);
     return rows;
   },
+  async findBetween(startDate, endDate) {
+    const sql = `SELECT * FROM reservation WHERE start_date >= ? AND start_date <= ?`;
+    const rows = await query(sql, [startDate, endDate]);
+    return rows;
+  },
   async findById(id) {
     const sql = `SELECT * FROM reservation WHERE id = ?`;
     const rows = await query(sql, [id]);

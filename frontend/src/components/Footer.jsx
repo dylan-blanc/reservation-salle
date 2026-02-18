@@ -15,7 +15,7 @@ function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="bg-slate-900 text-slate-300">
+    <footer className="text-white shadow-[0_12px_40px_rgba(2,6,23,0.35)]">
       <div className="mx-auto flex w-full max-w-6xl flex-col items-center justify-between gap-4 px-6 py-2 md:flex-row">
         <div className="flex flex-1 justify-start">
           <Link

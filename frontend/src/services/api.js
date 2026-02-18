@@ -50,5 +50,14 @@ export const planningService = {
       method: "POST",
       body: JSON.stringify(data),
     }),
+  update: (id, data) =>
+    fetchAPI(`/planning/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    }),
+  delete: (id) =>
+    fetchAPI(`/planning/${id}`, {
+      method: "DELETE",
+    }),
   getAll: () => fetchAPI("/planning"),
 };

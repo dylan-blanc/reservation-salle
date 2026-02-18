@@ -13,7 +13,7 @@ function Header() {
     navigate("/login");
   };
   return (
-    <header className="bg-slate-950 text-white shadow-[0_12px_40px_rgba(2,6,23,0.35)]">
+    <header className=" text-white shadow-[0_12px_40px_rgba(2,6,23,0.35)]">
       <div className="mx-auto max-w-6xl px-4">
         <div className="flex h-16 items-center">
           <nav
