@@ -32,7 +32,7 @@ function ModalReadReservation({ reservation, onClose, onEdit, onDelete }) {
           <p className="text-[11px] uppercase tracking-[0.2em] text-slate-400">
             Contenu de la reunion
           </p>
-          <p className="mt-2 text-lg font-semibold text-slate-100">
+          <p className="mt-2 text-lg font-semibold text-slate-100 whitespace-pre-line wrap-break-word">
             {reservation.title}
           </p>
         </div>

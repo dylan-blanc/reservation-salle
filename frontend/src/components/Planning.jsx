@@ -4,23 +4,15 @@ import { planningService } from "../services/api";
 import ModalReadReservation from "./ModalReadReservation";
 
 const HOUR_START = 8;
-const HOUR_COUNT = 12;
+const HOUR_COUNT = 11;
 const HOUR_HEIGHT = 40;
 
 const normalizeDayIndex = (dayIndex) => (dayIndex === 0 ? 7 : dayIndex);
-
-const isWeekendIndex = (dayIndex) => dayIndex === 6 || dayIndex === 7;
 
 const getStartOfWeek = (date) => {
   const start = new Date(date);
   const todayIndex = normalizeDayIndex(start.getDay());
   start.setHours(0, 0, 0, 0);
-
-  if (isWeekendIndex(todayIndex)) {
-    start.setDate(start.getDate() + (8 - todayIndex));
-    return start;
-  }
-
   start.setDate(start.getDate() - (todayIndex - 1));
   return start;
 };
@@ -74,7 +66,6 @@ function Planning() {
   const heures = Array.from({ length: HOUR_COUNT }, (_, i) => i + HOUR_START);
   const now = new Date();
   const todayIndex = normalizeDayIndex(now.getDay());
-  const isWeekend = isWeekendIndex(todayIndex);
   const startOfWeek = getStartOfWeek(now);
   const endOfWeek = new Date(startOfWeek);
   endOfWeek.setDate(startOfWeek.getDate() + 4);
@@ -98,10 +89,10 @@ function Planning() {
     loadPlanning();
   }, [loadPlanning, isModalOpen]);
 
-  const isPastDay = (dayId) => !isWeekend && dayId < todayIndex;
+  const isPastDay = (dayId) => dayId < todayIndex;
 
   const isPastHourSlot = (jour, heure) => {
-    if (isWeekend || jour.id !== todayIndex) {
+    if (jour.id !== todayIndex) {
       return false;
     }
 
@@ -134,7 +125,7 @@ function Planning() {
   };
 
   const handleSlotClick = (jour, heure) => {
-    if (isWeekend || isPastDay(jour.id) || isPastHourSlot(jour, heure)) {
+    if (isPastDay(jour.id) || isPastHourSlot(jour, heure)) {
       return;
     }
 
@@ -228,12 +219,17 @@ function Planning() {
       <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
         <div className="text-sm text-slate-300 font-semibold">
           Planning semaine en cours
-        </div>
-        {isWeekend && (
-          <div className="text-xs text-amber-300">
-            Planning ferme le week-end.
+          <div className="text-xs text-slate-500">
+            Du {startOfWeek.toLocaleDateString("fr-FR")} au{" "}
+            {endOfWeek.toLocaleDateString("fr-FR")}
           </div>
-        )}
+        </div>
+        <div>
+          {startOfWeek.toLocaleDateString("fr-FR", {
+            month: "long",
+            year: "numeric",
+          })}
+        </div>
       </div>
 
       {error && <div className="mb-4 text-sm text-red-300">{error}</div>}
@@ -245,7 +241,7 @@ function Planning() {
       <div
         className="w-full grid border border-white/10 bg-slate-900/80 backdrop-blur-sm rounded-lg overflow-hidden"
         style={{
-          gridTemplateColumns: "80px repeat(5, minmax(0, 1fr))",
+          gridTemplateColumns: "60px repeat(5, minmax(0, 1fr))",
           gridTemplateRows: "auto 1fr",
         }}
       >
@@ -253,18 +249,18 @@ function Planning() {
           Heures
         </div>
         {jours.map((jour) => {
-          const isToday = jour.id === todayIndex && !isWeekend;
+          const isToday = jour.id === todayIndex;
 
           return (
             <div
               key={jour.id}
-              className={`border-b border-white/10 p-2 text-sm font-semibold ${
+              className={`border-b border-white/10 p-1 sm:p-2 text-[11px] sm:text-sm leading-tight text-center font-semibold break-words ${
                 isToday ? "text-accent bg-accent/10" : "text-slate-200"
               }`}
             >
               {jour.nom}
               {isToday && (
-                <span className="block text-[9px] uppercase font-bold text-accent">
+                <span className="block text-[8px] sm:text-[9px] uppercase font-bold text-accent leading-tight">
                   Aujourd'hui
                 </span>
               )}
@@ -286,8 +282,8 @@ function Planning() {
 
         {jours.map((jour) => {
           const dayReservations = reservationsByDay[jour.id] || [];
-          const disabledDay = isWeekend || isPastDay(jour.id);
-          const isToday = jour.id === todayIndex && !isWeekend;
+          const disabledDay = isPastDay(jour.id);
+          const isToday = jour.id === todayIndex;
 
           return (
             <div
@@ -336,6 +332,9 @@ function Planning() {
                     reservation.start,
                     reservation.end,
                   );
+                  const isShortReservation =
+                    (reservation.end - reservation.start) / (1000 * 60 * 60) <
+                    3;
 
                   if (!layout) {
                     return null;
@@ -346,15 +345,25 @@ function Planning() {
                       key={reservation.id}
                       type="button"
                       onClick={() => handleReservationClick(reservation, jour)}
-                      className="absolute left-2 right-2 rounded-lg bg-emerald-300 text-slate-900 shadow-md shadow-emerald-500/20 px-3 py-2 text-xs sm:text-sm font-semibold leading-tight text-left cursor-pointer hover:brightness-95"
+                      className="absolute left-2 right-2 rounded-lg bg-emerald-300 text-slate-900 shadow-md shadow-emerald-500/20 px-2 py-2 text-xs sm:text-sm font-semibold leading-none text-center cursor-pointer hover:brightness-95 overflow-hidden min-w-0 flex flex-col justify-center"
                       style={{ top: layout.top, height: layout.height }}
                     >
-                      <div className="text-[11px] uppercase tracking-wide text-emerald-900/70">
-                        {formatHourLabel(reservation.start)} -
-                        {formatHourLabel(reservation.end)}
-                      </div>
-                      <div className="wrap-break-word">
-                        {reservation.reunion_title}
+                      {!isShortReservation && (
+                        <div className="text-[12px] uppercase tracking-wide text-emerald-900/70 hidden sm:block">
+                          {formatHourLabel(reservation.start)} -{" "}
+                          {formatHourLabel(reservation.end)}
+                        </div>
+                      )}
+                      {/* Affiche le bloc seulement à partir de sm (>=640px) */}
+                      <div className="hidden sm:block wrap-break-word text-center px-1 leading-none">
+                        {!isShortReservation && (
+                          <span className="text-xs font-bold text-emerald-900/90 leading-none">
+                            {reservation.organizer}
+                          </span>
+                        )}{" "}
+                        <span className="text-xs leading-none">
+                          {reservation.reunion_title}
+                        </span>
                       </div>
                     </button>
                   );

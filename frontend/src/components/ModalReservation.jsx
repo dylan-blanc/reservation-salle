@@ -28,6 +28,7 @@ function ModalReservation({ isOpen, onClose, slotData, reservation, onSaved }) {
   }, [reservation?.jour?.id, slotData?.jour?.id]);
 
   const [meaning, setmeaning] = useState("");
+  const meaningRef = React.useRef(null);
   const [StartHour, setStartHour] = useState(defaultStart);
   const [EndHour, setEndHour] = useState(defaultEnd);
   const [loading, setLoading] = useState(false);
@@ -49,6 +50,14 @@ function ModalReservation({ isOpen, onClose, slotData, reservation, onSaved }) {
     setStartHour(defaultStart);
     setEndHour(defaultEnd);
   }, [isOpen, reservation, defaultStart, defaultEnd]);
+
+  // Ajuste dynamiquement la hauteur du textarea
+  useEffect(() => {
+    if (meaningRef.current) {
+      meaningRef.current.style.height = "auto";
+      meaningRef.current.style.height = meaningRef.current.scrollHeight + "px";
+    }
+  }, [meaning]);
 
   if (!isOpen) return null;
 
@@ -105,14 +114,21 @@ function ModalReservation({ isOpen, onClose, slotData, reservation, onSaved }) {
             <label className="text-sm font-medium text-slate-300">
               motif de la réservation
             </label>
-            <input
-              type="text"
+            <textarea
+              ref={meaningRef}
               value={meaning}
-              onChange={(e) => setmeaning(e.target.value)}
-              placeholder="Entrer le motif de la réservation"
+              onChange={(e) => {
+                setmeaning(e.target.value);
+              }}
+              placeholder="Entrer le motif de la réservation, maximum 255 caractères"
               required
-              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all"
+              maxLength={255}
+              className="text-center wh-full bg-white/5 border border-white/10 rounded-xl mt-2 text-lg font-semibold text-slate-100 placeholder:text-slate-500 wrap-break-word resize-none overflow-hidden"
+              style={{ minWidth: "100%", minHeight: "48px", maxHeight: "250px" }}
             />
+            <div className="flex justify-end text-xs text-slate-400 pt-1">
+              {meaning.length}/255
+            </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">

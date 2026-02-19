@@ -41,7 +41,7 @@ function Header() {
                   to="me"
                   className="text-sm font-semibold text-slate-200 transition hover:text-white"
                 >
-                  Mon Profile
+                  Mon Profil
                 </Link>
                 <span className="hidden text-sm text-slate-300 sm:inline">
                   Bonjour {user?.surname}
