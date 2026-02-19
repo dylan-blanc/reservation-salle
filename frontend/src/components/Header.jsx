@@ -60,13 +60,13 @@ function Header() {
                   to="/login"
                   className="text-sm font-semibold text-slate-200 transition hover:text-white"
                 >
-                  Log in <span aria-hidden="true">→</span>
+                  Connexion
                 </Link>
                 <Link
                   to="/register"
                   className="rounded-full border border-slate-700 px-4 py-1.5 text-sm font-semibold text-white transition hover:border-indigo-400 hover:text-indigo-200"
                 >
-                  S'inscrire
+                  Inscription
                 </Link>
               </>
             )}
